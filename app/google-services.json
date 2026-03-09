@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "875070156333",
+    "project_id": "microredesocialvinistahlberg",
+    "storage_bucket": "microredesocialvinistahlberg.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:875070156333:android:45eb513b5900ef16d1d2a4",
+        "android_client_info": {
+          "package_name": "com.example.microredesocial"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqzZMn2xU7U3vFdnR6Twp4-X5nFwUBo18"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
