@@ -1,4 +1,4 @@
-package com.example.microredesocial
+package com.example.microredesocial.ui
 
 import android.net.Uri
 import android.os.Bundle
