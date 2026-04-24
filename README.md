@@ -37,13 +37,6 @@ Aplicativo Android de uma micro rede social desenvolvido para a disciplina **ARQ
 3. Adicione o arquivo `google-services.json` na pasta `app/`
 4. Execute o app
 
-## 📂 Estrutura
-app/src/main/java/com/example/microredesocial/
-├── auth/ # Autenticação
-├── dao/ # Acesso ao Firestore
-├── model/ # User e Post
-├── ui/ # Activities
-└── utils/ # Helpers
 
 ## 👨‍💻 Autor
 
