@@ -1,24 +1,40 @@
 package com.example.microredesocial.auth
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 
 class UserAuth {
+    private val firebaseAuth = FirebaseAuth.getInstance()
 
-    private val auth = FirebaseAuth.getInstance()
+    fun getCurrentUser(): FirebaseUser? = firebaseAuth.currentUser
+    fun getCurrentUserEmail(): String? = firebaseAuth.currentUser?.email
 
-    fun login(email: String, password: String, callback: (Boolean) -> Unit) {
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task -> callback(task.isSuccessful) }
-    }
-
-    fun cadastro(email: String, password: String, callback: (Boolean, String?) -> Unit) {
-        auth.createUserWithEmailAndPassword(email, password)
+    fun createUserWithEmailAndPassword(
+        email: String,
+        password: String,
+        onComplete: (Boolean, String?) -> Unit
+    ) {
+        firebaseAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
-                callback(task.isSuccessful, task.exception?.message)
+                if (task.isSuccessful) {
+                    onComplete(true, null)
+                } else {
+                    onComplete(false, task.exception?.message)
+                }
             }
     }
 
-    fun getEmailUsuarioLogado(): String? = auth.currentUser?.email
-
-    fun logout() = auth.signOut()
+    fun updatePassword(
+        newPassword: String,
+        onComplete: (Boolean, String?) -> Unit
+    ) {
+        firebaseAuth.currentUser?.updatePassword(newPassword)
+            ?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    onComplete(true, null)
+                } else {
+                    onComplete(false, task.exception?.message)
+                }
+            } ?: onComplete(false, "Usuário não autenticado")
+    }
 }
