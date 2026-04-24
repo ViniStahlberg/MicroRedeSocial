@@ -61,7 +61,6 @@ class PostDAO {
         onSuccess: (List<Post>) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        // Busca por cidade ignorando maiúsculas/minúsculas
         val cidadeLower = cidade.lowercase()
 
         db.collection(collectionName)
@@ -71,7 +70,6 @@ class PostDAO {
                 val posts = mutableListOf<Post>()
                 for (document in documents) {
                     val post = document.toObject(Post::class.java)
-                    // Filtrar por cidade manualmente (case insensitive)
                     if (post.cidade.lowercase().contains(cidadeLower)) {
                         posts.add(post)
                     }

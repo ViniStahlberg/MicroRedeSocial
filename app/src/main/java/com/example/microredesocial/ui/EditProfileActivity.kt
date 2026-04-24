@@ -76,7 +76,6 @@ class EditProfileActivity : AppCompatActivity() {
                             val bitmap = Base64Converter.stringToBitmap(it.fotoPerfil)
                             binding.profilePicture.setImageBitmap(bitmap)
                         } catch (e: Exception) {
-                            // Imagem padrão já está setada
                         }
                     }
                 }
@@ -93,13 +92,11 @@ class EditProfileActivity : AppCompatActivity() {
         val novaSenha = binding.edtNovaSenha.text.toString().trim()
         val confirmarSenha = binding.edtConfirmarSenha.text.toString().trim()
 
-        // Validar nome e username
         if (username.isEmpty() || nomeCompleto.isEmpty()) {
             Toast.makeText(this, "Preencha nome de usuário e nome completo", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Se o usuário digitou uma nova senha, validar
         if (novaSenha.isNotEmpty() || confirmarSenha.isNotEmpty()) {
             if (novaSenha != confirmarSenha) {
                 Toast.makeText(this, "As senhas não coincidem", Toast.LENGTH_SHORT).show()
@@ -109,11 +106,9 @@ class EditProfileActivity : AppCompatActivity() {
                 Toast.makeText(this, "A senha deve ter pelo menos 6 caracteres", Toast.LENGTH_SHORT).show()
                 return
             }
-            // Alterar a senha no Firebase Authentication
             alterarSenha(novaSenha)
         }
 
-        // Atualizar foto
         val fotoPerfilString = if (selectedImageUri != null && binding.profilePicture.drawable != null) {
             try {
                 Base64Converter.drawableToString(binding.profilePicture.drawable)
@@ -130,7 +125,6 @@ class EditProfileActivity : AppCompatActivity() {
             fotoPerfil = fotoPerfilString
         ) ?: return
 
-        // Atualizar dados do perfil no Firestore
         userDAO.atualizarPerfil(userAtualizado,
             onSuccess = {
                 Toast.makeText(this, "Perfil atualizado com sucesso!", Toast.LENGTH_SHORT).show()
@@ -148,7 +142,6 @@ class EditProfileActivity : AppCompatActivity() {
             onComplete = { success, message ->
                 if (success) {
                     Toast.makeText(this, "Senha alterada com sucesso!", Toast.LENGTH_SHORT).show()
-                    // Limpar campos de senha
                     binding.edtNovaSenha.text?.clear()
                     binding.edtConfirmarSenha.text?.clear()
                 } else {

@@ -75,13 +75,10 @@ class ProfileActivity : AppCompatActivity() {
             return
         }
 
-        // Converter imagem para String Base64
         val fotoPerfilString = if (selectedImageUri != null) {
-            // Se o usuário selecionou uma nova foto
             val drawable = binding.profilePicture.drawable
             Base64Converter.drawableToString(drawable)
         } else {
-            // Se não selecionou nova foto, pegar a atual
             val drawable = binding.profilePicture.drawable
             if (drawable != null) {
                 Base64Converter.drawableToString(drawable)

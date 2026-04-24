@@ -46,7 +46,6 @@ class PostAdapter(
             binding.txtTexto.text = post.texto
             binding.txtData.text = dateFormat.format(post.dataCriacao)
 
-            // Cidade
             if (post.cidade.isNotEmpty()) {
                 binding.txtCidade.text = "📍 ${post.cidade}"
                 binding.txtCidade.visibility = android.view.View.VISIBLE
@@ -54,7 +53,6 @@ class PostAdapter(
                 binding.txtCidade.visibility = android.view.View.GONE
             }
 
-            // Foto do perfil do autor
             if (post.autorFoto.isNotEmpty()) {
                 try {
                     val bitmap = Base64Converter.stringToBitmap(post.autorFoto)
@@ -66,7 +64,6 @@ class PostAdapter(
                 binding.imgProfile.setImageResource(android.R.drawable.sym_def_app_icon)
             }
 
-            // Imagem do post
             if (post.imagemBase64.isNotEmpty()) {
                 try {
                     val bitmap = Base64Converter.stringToBitmap(post.imagemBase64)

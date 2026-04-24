@@ -97,7 +97,6 @@ class HomeActivity : AppCompatActivity() {
                 val totalItems = layoutManager.itemCount
                 val lastVisible = layoutManager.findLastVisibleItemPosition()
 
-                // Só carrega mais se não estiver em busca e não estiver carregando
                 if (!carregando && !isBuscando && lastVisible >= totalItems - 1 && cidadeBusca == null) {
                     carregarMaisPosts()
                 }
@@ -113,7 +112,7 @@ class HomeActivity : AppCompatActivity() {
 
         postDAO.buscarPosts(
             ultimoPost = null,
-            limite = 10, // Aumentei para 10 posts para ver mais rápido
+            limite = 10,
             onSuccess = { novosPosts ->
                 posts.clear()
                 posts.addAll(novosPosts)

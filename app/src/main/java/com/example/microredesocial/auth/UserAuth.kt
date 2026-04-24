@@ -5,10 +5,8 @@ import com.google.firebase.auth.FirebaseUser
 
 class UserAuth {
     private val firebaseAuth = FirebaseAuth.getInstance()
-
     fun getCurrentUser(): FirebaseUser? = firebaseAuth.currentUser
     fun getCurrentUserEmail(): String? = firebaseAuth.currentUser?.email
-
     fun createUserWithEmailAndPassword(
         email: String,
         password: String,
