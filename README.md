@@ -40,7 +40,7 @@ Aplicativo Android de uma micro rede social desenvolvido para a disciplina **ARQ
 
 ## 👨‍💻 Autor
 
-**Vinicius Stahlberg** - [GitHub](https://github.com/SEU_USUARIO)
+**Vinicius Stahlberg** - [GitHub](https://github.com/ViniStahlberg)
 
 ---
 
