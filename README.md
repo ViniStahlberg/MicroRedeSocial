@@ -9,6 +9,8 @@ Aplicativo Android de uma micro rede social desenvolvido para a disciplina **ARQ
 
 ## 🎥 Demonstração
 
+https://github.com/user-attachments/assets/e4ac8908-aa2d-4e56-962a-86ee8f8331ae
+
 | Vídeo Rápido (30s) | Vídeo Explicativo (5-10min) |
 |:---:|:---:|
 | [Clique aqui]() | [Clique aqui]() |
