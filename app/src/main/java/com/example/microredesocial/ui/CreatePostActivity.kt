@@ -162,6 +162,7 @@ class CreatePostActivity : AppCompatActivity() {
                     postDAO.criarPost(post,
                         onSuccess = {
                             Toast.makeText(this, "Post publicado!", Toast.LENGTH_SHORT).show()
+                            setResult(RESULT_OK)
                             finish()
                         },
                         onFailure = {

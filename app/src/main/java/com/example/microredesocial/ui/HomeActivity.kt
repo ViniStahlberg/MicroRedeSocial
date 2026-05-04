@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -44,6 +43,13 @@ class HomeActivity : AppCompatActivity() {
 
         binding.fabNovaPostagem.setOnClickListener {
             startActivity(Intent(this, CreatePostActivity::class.java))
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!isBuscando) {
+            carregarPosts()
         }
     }
 
@@ -97,7 +103,7 @@ class HomeActivity : AppCompatActivity() {
                 val totalItems = layoutManager.itemCount
                 val lastVisible = layoutManager.findLastVisibleItemPosition()
 
-                if (!carregando && !isBuscando && lastVisible >= totalItems - 1 && cidadeBusca == null) {
+                if (!carregando && !isBuscando && lastVisible >= totalItems - 1 && totalItems >= 5) {
                     carregarMaisPosts()
                 }
             }
@@ -108,49 +114,67 @@ class HomeActivity : AppCompatActivity() {
         if (carregando) return
 
         carregando = true
-        mostrarLoading(true)
+        postAdapter.setLoading(true)
 
         postDAO.buscarPosts(
             ultimoPost = null,
-            limite = 10,
+            limite = 5,
             onSuccess = { novosPosts ->
-                posts.clear()
-                posts.addAll(novosPosts)
+                postAdapter.setLoading(false)
+                postAdapter.atualizarPosts(novosPosts)
+
                 ultimoPost = if (novosPosts.isNotEmpty()) novosPosts.last() else null
-                postAdapter.notifyDataSetChanged()
+
+                if (novosPosts.size < 5) {
+                    postAdapter.setEndOfList(true)
+                } else {
+                    postAdapter.setEndOfList(false)
+                }
+
                 carregando = false
-                mostrarLoading(false)
 
                 if (novosPosts.isEmpty()) {
                     Toast.makeText(this, "Nenhum post ainda. Crie o primeiro!", Toast.LENGTH_SHORT).show()
                 }
             },
             onFailure = { exception ->
-                Toast.makeText(this, "Erro ao carregar posts: ${exception.message}", Toast.LENGTH_SHORT).show()
+                postAdapter.setLoading(false)
+                Toast.makeText(this, "Erro ao carregar posts", Toast.LENGTH_SHORT).show()
                 carregando = false
-                mostrarLoading(false)
             }
         )
     }
 
     private fun carregarMaisPosts() {
         if (carregando) return
+        if (ultimoPost == null) return
 
         carregando = true
+        postAdapter.setLoading(true)
 
         postDAO.buscarPosts(
             ultimoPost = ultimoPost,
-            limite = 10,
+            limite = 5,
             onSuccess = { novosPosts ->
+                postAdapter.setLoading(false)
+
                 if (novosPosts.isNotEmpty()) {
-                    val posicaoInicial = posts.size
-                    posts.addAll(novosPosts)
-                    postAdapter.notifyItemRangeInserted(posicaoInicial, novosPosts.size)
+                    postAdapter.adicionarPosts(novosPosts)
                     ultimoPost = novosPosts.last()
+
+                    Toast.makeText(this, "📱 +${novosPosts.size} posts carregados", Toast.LENGTH_SHORT).show()
+
+                    if (novosPosts.size < 5) {
+                        postAdapter.setEndOfList(true)
+                    }
+                } else {
+                    postAdapter.setEndOfList(true)
+                    Toast.makeText(this, "✨ Você chegou ao fim dos posts!", Toast.LENGTH_SHORT).show()
                 }
                 carregando = false
             },
             onFailure = {
+                postAdapter.setLoading(false)
                 carregando = false
             }
         )
@@ -174,8 +198,6 @@ class HomeActivity : AppCompatActivity() {
 
                 if (novosPosts.isEmpty()) {
                     Toast.makeText(this, "Nenhum post encontrado em '$cidade'", Toast.LENGTH_LONG).show()
-                } else {
-                    Toast.makeText(this, "Encontrados ${novosPosts.size} posts em '$cidade'", Toast.LENGTH_SHORT).show()
                 }
             },
             onFailure = { exception ->
@@ -187,10 +209,6 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun mostrarLoading(mostrar: Boolean) {
-        if (mostrar) {
-            binding.progressBar.visibility = View.VISIBLE
-        } else {
-            binding.progressBar.visibility = View.GONE
-        }
+        binding.progressBar.visibility = if (mostrar) android.view.View.VISIBLE else android.view.View.GONE
     }
 }

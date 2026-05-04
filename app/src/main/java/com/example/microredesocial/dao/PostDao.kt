@@ -34,26 +34,40 @@ class PostDAO {
         onSuccess: (List<Post>) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        var query = db.collection(collectionName)
-            .orderBy("dataCriacao", Query.Direction.DESCENDING)
-            .limit(limite.toLong())
-
         if (ultimoPost != null && ultimoPost.dataCriacao != null) {
-            query = query.startAfter(ultimoPost.dataCriacao)
-        }
-
-        query.get()
-            .addOnSuccessListener { documents ->
-                val posts = mutableListOf<Post>()
-                for (document in documents) {
-                    val post = document.toObject(Post::class.java)
-                    posts.add(post)
+            db.collection(collectionName)
+                .orderBy("dataCriacao", Query.Direction.DESCENDING)
+                .startAfter(ultimoPost.dataCriacao)
+                .limit(limite.toLong())
+                .get()
+                .addOnSuccessListener { documents ->
+                    val posts = mutableListOf<Post>()
+                    for (document in documents) {
+                        val post = document.toObject(Post::class.java)
+                        posts.add(post)
+                    }
+                    onSuccess(posts)
                 }
-                onSuccess(posts)
-            }
-            .addOnFailureListener { exception ->
-                onFailure(exception)
-            }
+                .addOnFailureListener { exception ->
+                    onFailure(exception)
+                }
+        } else {
+            db.collection(collectionName)
+                .orderBy("dataCriacao", Query.Direction.DESCENDING)
+                .limit(limite.toLong())
+                .get()
+                .addOnSuccessListener { documents ->
+                    val posts = mutableListOf<Post>()
+                    for (document in documents) {
+                        val post = document.toObject(Post::class.java)
+                        posts.add(post)
+                    }
+                    onSuccess(posts)
+                }
+                .addOnFailureListener { exception ->
+                    onFailure(exception)
+                }
+        }
     }
 
     fun buscarPostsPorCidade(
@@ -61,8 +75,6 @@ class PostDAO {
         onSuccess: (List<Post>) -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        val cidadeLower = cidade.lowercase()
-
         db.collection(collectionName)
             .orderBy("dataCriacao", Query.Direction.DESCENDING)
             .get()
@@ -70,7 +82,7 @@ class PostDAO {
                 val posts = mutableListOf<Post>()
                 for (document in documents) {
                     val post = document.toObject(Post::class.java)
-                    if (post.cidade.lowercase().contains(cidadeLower)) {
+                    if (post.cidade.lowercase().contains(cidade.lowercase())) {
                         posts.add(post)
                     }
                 }
